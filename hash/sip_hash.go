@@ -21,6 +21,10 @@ func NewSipHasher() (*SipHasher, error) {
 	return &SipHasher{k0: k0, k1: k1}, nil
 }
 
+func NewSipHasherZero() *SipHasher {
+	return &SipHasher{k0: 0, k1: 0}
+}
+
 // Write adds more data to the running hash
 func (s *SipHasher) Write(p []byte) (n int, err error) {
 	s.BaseHasher.Write(p)
@@ -29,7 +33,7 @@ func (s *SipHasher) Write(p []byte) (n int, err error) {
 
 // Sum appends the current hash to b and returns the resulting slice
 func (s *SipHasher) Sum(b []byte) []byte {
-	h := s.sipHash13(s.BaseHasher.Sum(nil))
+	h := s.SipHash13(s.BaseHasher.Sum(nil))
 	return append(b, Uint64ToBytes(h)...)
 }
 
@@ -49,7 +53,7 @@ func (s *SipHasher) BlockSize() int {
 }
 
 // sipHash13 implements the core SipHash-1-3 algorithm
-func (s *SipHasher) sipHash13(data []byte) uint64 {
+func (s *SipHasher) SipHash13(data []byte) uint64 {
 	v0, v1, v2, v3 := s.initializeState()
 	dataLen := uint64(len(data))
 

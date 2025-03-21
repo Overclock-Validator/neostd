@@ -1,4 +1,4 @@
-module github.com/ielm/neostd
+module github.com/Overclock-Validator/neostd
 
 go 1.21.4
 
